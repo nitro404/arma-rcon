@@ -1,0 +1,39 @@
+{
+  "name": "arma-rcon",
+  "version": "1.0.0",
+  "description": "A system for connecting to remote console for ARMA servers over UDP.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nitro404/arma-rcon.git"
+  },
+  "keywords": [
+    "arma",
+    "operation",
+    "arrowhead",
+    "rcon",
+    "remote",
+    "console",
+    "battleeye"
+  ],
+  "author": {
+    "name": "Kevin Scroggins"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nitro404/arma-rcon/issues"
+  },
+  "homepage": "https://github.com/nitro404/arma-rcon#readme",
+  "dependencies": {
+    "async": "^2.6.0",
+    "bytebuffer": "^5.0.1",
+    "crc": "^3.5.0",
+    "extra-utilities": "^1.1.2",
+    "moment": "^2.20.1",
+    "node-schedule": "^1.3.0",
+    "validator": "^9.4.0"
+  }
+}

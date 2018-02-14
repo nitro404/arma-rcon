@@ -1,0 +1,11 @@
+node_modules
+bower_components
+coverage
+.sass-cache
+yarn.lock
+npm-debug.log
+yarn-error.log
+Thumbs.db
+desktop.ini
+.DS_Store
+!.gitkeep
