@@ -1,5 +1,11 @@
 # ARMA RCon
 
+[![NPM version][npm-version-image]][npm-url]
+[![Build Status][build-status-image]][build-status-url]
+[![Coverage Status][coverage-image]][coverage-url]
+[![Known Vulnerabilities][snyk-image]][snyk-url]
+[![Downloads][npm-downloads-image]][npm-url]
+
 A system for connecting to remote console for ARMA servers over UDP.
 
 ## Server-Side Usage
@@ -68,3 +74,16 @@ To install this module:
 ```bash
 npm install arma-rcon
 ```
+
+[npm-url]: https://www.npmjs.com/package/arma-rcon
+[npm-version-image]: https://img.shields.io/npm/v/arma-rcon.svg
+[npm-downloads-image]: http://img.shields.io/npm/dm/arma-rcon.svg
+
+[build-status-url]: https://travis-ci.org/nitro404/arma-rcon
+[build-status-image]: https://travis-ci.org/nitro404/arma-rcon.svg?branch=master
+
+[coverage-url]: https://coveralls.io/github/nitro404/arma-rcon?branch=master
+[coverage-image]: https://coveralls.io/repos/github/nitro404/arma-rcon/badge.svg?branch=master
+
+[snyk-url]: https://snyk.io/test/github/nitro404/arma-rcon?targetFile=package.json
+[snyk-image]: https://snyk.io/test/github/nitro404/arma-rcon/badge.svg?targetFile=package.json
