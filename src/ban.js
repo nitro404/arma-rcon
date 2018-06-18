@@ -1,3 +1,5 @@
+"use strict";
+
 var utilities = require("extra-utilities");
 var banType = require("./ban-type");
 
@@ -36,7 +38,7 @@ Ban.prototype.isTemporary = function() {
 	var self = this;
 
 	return self.minutesLeft >= 0;
-}
+};
 
 Ban.parseFrom = function(data, type) {
 	if(utilities.isEmptyString(data)) {
@@ -93,14 +95,14 @@ Ban.parseMinutesLeft = function(value) {
 
 		var minutes = utilities.parseInteger(formattedValue);
 
-		if(isNaN(minutes) || minutes < -1) {
+		if(utilities.isInvalidNumber(minutes) || minutes < -1) {
 			return null;
 		}
 
 		return minutes;
 	}
 	else if(Number.isInteger(value)) {
-		if(isNaN(minutes) || minutes < -1) {
+		if(utilities.isInvalidNumber(minutes) || minutes < -1) {
 			return null;
 		}
 

@@ -1,3 +1,5 @@
+"use strict";
+
 var dgram = require("dgram");
 var async = require("async");
 var moment = require("moment");
@@ -50,9 +52,7 @@ BattlEyeClient.prototype.sendPacket = function(packet, store, callback) {
 	}
 
 	if(!BattlEyePacket.isValid(packet)) {
-		var error = new Error("Cannot send invalid packet.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Cannot send invalid packet."));
 	}
 
 	var dataBuffer = null;
@@ -82,9 +82,8 @@ BattlEyeClient.prototype.sendPacket = function(packet, store, callback) {
 				callback: callback
 			});
 		}
-		else {
-			return callback(null, null, bytesSent);
-		}
+
+		return callback(null, null, bytesSent);
 	});
 };
 
@@ -117,7 +116,7 @@ BattlEyeClient.prototype.receivePacket = function(data, info) {
 		if(incomingPacket.type === battlEyePacketType.login.value) {
 			var outgoingPacketData = null;
 
-			for(var i=0;i<self.outgoingPacketCache.length;i++) {
+			for(var i = 0; i < self.outgoingPacketCache.length; i++) {
 				outgoingPacketData = self.outgoingPacketCache[i];
 
 				if(outgoingPacketData.packet.type === battlEyePacketType.login.value) {
@@ -134,7 +133,7 @@ BattlEyeClient.prototype.receivePacket = function(data, info) {
 			if(replySequenceNumber >= 0) {
 				var outgoingPacketData = null;
 
-				for(var i=0;i<self.outgoingPacketCache.length;i++) {
+				for(var i = 0; i < self.outgoingPacketCache.length; i++) {
 					outgoingPacketData = self.outgoingPacketCache[i];
 					requestSequenceNumber = outgoingPacketData.packet.getSequenceNumber();
 
@@ -182,7 +181,7 @@ BattlEyeClient.prototype.resendPackets = function() {
 
 	var outgoingPacket = null;
 
-	for(var i=0;i<self.outgoingPacketCache.length;i++) {
+	for(var i = 0; i < self.outgoingPacketCache.length; i++) {
 		outgoingPacket = self.outgoingPacketCache[i].packet;
 
 		if(new Date().getTime() - outgoingPacket.timeStamp.getTime() >= (outgoingPacket.resendCount + 1) * self.packetResendFrequency) {
@@ -204,8 +203,8 @@ BattlEyeClient.prototype.acknowledgePacket = function(sequence, callback) {
 
 	var formattedSequence = utilities.parseInteger(sequence);
 
-	if(isNaN(sequence) || sequence < 0 || sequence > 255) {
-		var error = new Error("Invalid packet acknowledge sequence: " + sequence + ".");
+	if(utilities.isInvalidNumber(sequence) || sequence < 0 || sequence > 255) {
+		return callback(new Error("Invalid packet acknowledge sequence: " + sequence + "."));
 	}
 
 	return self.sendPacket(
@@ -243,7 +242,7 @@ BattlEyeClient.prototype.disconnect = function(reason) {
 	self.packetResendInterval = null;
 	self.socket.close();
 
-	for(var i=0;i<self.outgoingPacketCache.length;i++) {
+	for(var i = 0; i < self.outgoingPacketCache.length; i++) {
 		self.outgoingPacketCache[i].callback(new Error(formattedReason));
 	}
 
@@ -263,7 +262,7 @@ BattlEyeClient.prototype.hasConnectionListener = function(listener) {
 		return false;
 	}
 
-	for(var i=0;i<self.connectionListeners.length;i++) {
+	for(var i = 0; i < self.connectionListeners.length; i++) {
 		if(self.connectionListeners[i] === listener) {
 			return true;
 		}
@@ -279,7 +278,7 @@ BattlEyeClient.prototype.indexOfConnectionListener = function(listener) {
 		return -1;
 	}
 
-	for(var i=0;i<self.connectionListeners.length;i++) {
+	for(var i = 0; i < self.connectionListeners.length; i++) {
 		if(self.connectionListeners[i] === listener) {
 			return i;
 		}
@@ -293,7 +292,7 @@ BattlEyeClient.prototype.getConnectionListener = function(index) {
 
 	var formattedIndex = utilities.parseInteger(index);
 
-	if(isNaN(formattedIndex) || formattedIndex < 0 || formattedIndex >= self.connectionListeners.length) {
+	if(utilities.isInvalidNumber(formattedIndex) || formattedIndex < 0 || formattedIndex >= self.connectionListeners.length) {
 		return null;
 	}
 
@@ -321,7 +320,7 @@ BattlEyeClient.prototype.removeConnectionListener = function(listener) {
 		listenerIndex = utilities.parseInteger(listener);
 	}
 
-	if(isNaN(listenerIndex) || listenerIndex < 0 || listenerIndex >= self.connectionListeners.length) {
+	if(utilities.isInvalidNumber(listenerIndex) || listenerIndex < 0 || listenerIndex >= self.connectionListeners.length) {
 		return false;
 	}
 
@@ -336,7 +335,6 @@ BattlEyeClient.prototype.clearConnectionListeners = function() {
 	self.connectionListeners.length = 0;
 };
 
-
 BattlEyeClient.prototype.numberOfMessageListeners = function() {
 	var self = this;
 
@@ -350,7 +348,7 @@ BattlEyeClient.prototype.hasMessageListener = function(listener) {
 		return false;
 	}
 
-	for(var i=0;i<self.messageListeners.length;i++) {
+	for(var i = 0; i < self.messageListeners.length; i++) {
 		if(self.messageListeners[i] === listener) {
 			return true;
 		}
@@ -366,7 +364,7 @@ BattlEyeClient.prototype.indexOfMessageListener = function(listener) {
 		return -1;
 	}
 
-	for(var i=0;i<self.messageListeners.length;i++) {
+	for(var i = 0; i < self.messageListeners.length; i++) {
 		if(self.messageListeners[i] === listener) {
 			return i;
 		}
@@ -380,7 +378,7 @@ BattlEyeClient.prototype.getMessageListener = function(index) {
 
 	var formattedIndex = utilities.parseInteger(index);
 
-	if(isNaN(formattedIndex) || formattedIndex < 0 || formattedIndex >= self.messageListeners.length) {
+	if(utilities.isInvalidNumber(formattedIndex) || formattedIndex < 0 || formattedIndex >= self.messageListeners.length) {
 		return null;
 	}
 
@@ -408,7 +406,7 @@ BattlEyeClient.prototype.removeMessageListener = function(listener) {
 		listenerIndex = utilities.parseInteger(listener);
 	}
 
-	if(isNaN(listenerIndex) || listenerIndex < 0 || listenerIndex >= self.messageListeners.length) {
+	if(utilities.isInvalidNumber(listenerIndex) || listenerIndex < 0 || listenerIndex >= self.messageListeners.length) {
 		return false;
 	}
 
@@ -428,7 +426,7 @@ BattlEyeClient.prototype.onConnect = function() {
 
 	var connectionListener = null;
 
-	for(var i=0;i<self.connectionListeners.length;i++) {
+	for(var i = 0; i < self.connectionListeners.length; i++) {
 		connectionListener = self.connectionListeners[i];
 
 		if(utilities.isFunction(connectionListener.onConnect)) {
@@ -443,7 +441,7 @@ BattlEyeClient.prototype.onDisconnect = function(reason) {
 	var formattedReason = utilities.isNonEmptyString(reason) ? reason.trim() : "Disconnected.";
 	var connectionListener = null;
 
-	for(var i=0;i<self.connectionListeners.length;i++) {
+	for(var i = 0; i < self.connectionListeners.length; i++) {
 		connectionListener = self.connectionListeners[i];
 
 		if(utilities.isFunction(connectionListener.onDisconnect)) {
@@ -457,7 +455,7 @@ BattlEyeClient.prototype.onMessageReceived = function(message) {
 
 	var messageListener = null;
 
-	for(var i=0;i<self.messageListeners.length;i++) {
+	for(var i = 0; i < self.messageListeners.length; i++) {
 		messageListener = self.messageListeners[i];
 
 		if(utilities.isFunction(messageListener.onMessageReceived)) {

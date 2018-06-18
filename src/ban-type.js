@@ -1,3 +1,5 @@
+"use strict";
+
 var validator = require("validator");
 var utilities = require("extra-utilities");
 
@@ -38,7 +40,7 @@ banType.getBanType = function(value) {
 	if(typeof value === "object") {
 		var currentBanType = null;
 
-		for(var i=0;i<banType.banTypes.length;i++) {
+		for(var i = 0; i < banType.banTypes.length; i++) {
 			currentBanType = banType.banTypes[i];
 
 			if(currentBanType === value) {
@@ -65,7 +67,7 @@ banType.getBanType = function(value) {
 		if(validator.isInt(formattedBanType)) {
 			var banTypeValue = utilities.parseInteger(formattedBanType);
 
-			if(isNaN(banTypeValue) || banTypeValue < 0 || banTypeValue >= banType.numberOfBanTypes()) {
+			if(utilities.isInvalidNumber(banTypeValue) || banTypeValue < 0 || banTypeValue >= banType.numberOfBanTypes()) {
 				return banType.invalid;
 			}
 
@@ -74,7 +76,7 @@ banType.getBanType = function(value) {
 
 		var currentBanType = null;
 
-		for(var i=0;i<banType.banTypes.length;i++) {
+		for(var i = 0; i < banType.banTypes.length; i++) {
 			currentBanType = banType.banTypes[i];
 
 			if(currentBanType.id === formattedBanType || currentBanType.name.toLowerCase() === formattedBanType.toLowerCase()) {

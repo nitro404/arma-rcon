@@ -1,3 +1,5 @@
+"use strict";
+
 var crc = require("crc");
 var ByteBuffer = require("bytebuffer");
 var utilities = require("extra-utilities");
@@ -93,7 +95,7 @@ BattlEyePacket.prototype.copyAttributesFrom = function(battlEyePacket, overwrite
 	var attribute = null;
 	var attributes = Object.keys(battlEyePacket.attributes);
 
-	for(var i=0;i<attributes.length;i++) {
+	for(var i = 0; i < attributes.length; i++) {
 		attribute = attributes[i];
 
 		if(!formattedOverwrite && self.hasAttribute(attribute)) {

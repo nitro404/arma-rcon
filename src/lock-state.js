@@ -1,3 +1,5 @@
+"use strict";
+
 var validator = require("validator");
 var utilities = require("extra-utilities");
 
@@ -45,7 +47,7 @@ lockState.getLockState = function(value) {
 	if(typeof value === "object") {
 		var currentLockState = null;
 
-		for(var i=0;i<lockState.lockStates.length;i++) {
+		for(var i = 0; i < lockState.lockStates.length; i++) {
 			currentLockState = lockState.lockStates[i];
 
 			if(currentLockState === value) {
@@ -72,7 +74,7 @@ lockState.getLockState = function(value) {
 		if(validator.isInt(formattedLockState)) {
 			var lockStateValue = utilities.parseInteger(formattedLockState);
 
-			if(isNaN(lockStateValue) || lockStateValue < 0 || lockStateValue >= lockState.numberOfLockStates()) {
+			if(utilities.isInvalidNumber(lockStateValue) || lockStateValue < 0 || lockStateValue >= lockState.numberOfLockStates()) {
 				return lockState.invalid;
 			}
 
@@ -81,7 +83,7 @@ lockState.getLockState = function(value) {
 
 		var currentLockState = null;
 
-		for(var i=0;i<lockState.lockStates.length;i++) {
+		for(var i = 0; i < lockState.lockStates.length; i++) {
 			currentLockState = lockState.lockStates[i];
 
 			if(currentLockState.id === formattedLockState || currentLockState.name.toLowerCase() === formattedLockState.toLowerCase()) {

@@ -1,3 +1,5 @@
+"use strict";
+
 var validator = require("validator");
 var utilities = require("extra-utilities");
 
@@ -45,7 +47,7 @@ battlEyePacketSubType.getSubType = function(value) {
 	if(typeof value === "object") {
 		var currentSubType = null;
 
-		for(var i=0;i<battlEyePacketSubType.subTypes.length;i++) {
+		for(var i = 0; i < battlEyePacketSubType.subTypes.length; i++) {
 			currentSubType = battlEyePacketSubType.subTypes[i];
 
 			if(currentSubType === value) {
@@ -72,7 +74,7 @@ battlEyePacketSubType.getSubType = function(value) {
 		if(validator.isInt(formattedSubType)) {
 			var subTypeValue = utilities.parseInteger(formattedSubType);
 
-			if(isNaN(subTypeValue) || subTypeValue < 0 || subTypeValue >= battlEyePacketSubType.numberOfSubTypes()) {
+			if(utilities.isInvalidNumber(subTypeValue) || subTypeValue < 0 || subTypeValue >= battlEyePacketSubType.numberOfSubTypes()) {
 				return battlEyePacketSubType.invalid;
 			}
 
@@ -81,7 +83,7 @@ battlEyePacketSubType.getSubType = function(value) {
 
 		var currentSubType = null;
 
-		for(var i=0;i<battlEyePacketSubType.subTypes.length;i++) {
+		for(var i = 0; i < battlEyePacketSubType.subTypes.length; i++) {
 			currentSubType = battlEyePacketSubType.subTypes[i];
 
 			if(currentSubType.id === formattedSubType || currentSubType.name.toLowerCase() === formattedSubType.toLowerCase()) {

@@ -1,3 +1,5 @@
+"use strict";
+
 var async = require("async");
 var schedule = require("node-schedule");
 var utilities = require("extra-utilities");
@@ -164,6 +166,8 @@ ARMAServer.prototype.uninitialize = function() {
 };
 
 ARMAServer.prototype.clear = function() {
+	var self = this;
+
 	self.loggedIn = false;
 	self.sequenceNumber = 0;
 	self.messageCounter = 1;
@@ -190,7 +194,7 @@ ARMAServer.prototype.numberOfMessages = function(read) {
 
 	var messageCount = 0;
 
-	for(var i=0;i<self.messages.length;i++) {
+	for(var i = 0; i < self.messages.length; i++) {
 		if(self.messages[i].read === formattedRead) {
 			messageCount++;
 		}
@@ -215,7 +219,7 @@ ARMAServer.prototype.hasMessage = function(message) {
 	var self = this;
 
 	if(message !== null && typeof message === "object") {
-		for(var i=0;i<self.messages.length;i++) {
+		for(var i = 0; i < self.messages.length; i++) {
 			if(self.messages[i] === message) {
 				return true;
 			}
@@ -226,11 +230,11 @@ ARMAServer.prototype.hasMessage = function(message) {
 	else if(typeof message === "number" || typeof message === "string") {
 		var messageID = utilities.parseInteger(message);
 
-		if(isNaN(messageID) || messageID < 1) {
+		if(utilities.isInvalidNumber(messageID) || messageID < 1) {
 			return false;
 		}
 
-		for(var i=0;i<self.messages.length;i++) {
+		for(var i = 0; i < self.messages.length; i++) {
 			if(self.messages[i].id === messageID) {
 				return true;
 			}
@@ -246,7 +250,7 @@ ARMAServer.prototype.indexOfMessage = function(message) {
 	var self = this;
 
 	if(message !== null && typeof message === "object") {
-		for(var i=0;i<self.messages.length;i++) {
+		for(var i = 0; i < self.messages.length; i++) {
 			if(self.messages[i] === message) {
 				return i;
 			}
@@ -257,11 +261,11 @@ ARMAServer.prototype.indexOfMessage = function(message) {
 	else if(typeof message === "number" || typeof message === "string") {
 		var messageID = utilities.parseInteger(message);
 
-		if(isNaN(messageID) || messageID < 1) {
+		if(utilities.isInvalidNumber(messageID) || messageID < 1) {
 			return -1;
 		}
 
-		for(var i=0;i<self.messages.length;i++) {
+		for(var i = 0; i < self.messages.length; i++) {
 			if(self.messages[i].id === messageID) {
 				return i;
 			}
@@ -278,7 +282,7 @@ ARMAServer.prototype.getMessage = function(index) {
 
 	var formattedIndex = utilities.parseInteger(index);
 
-	if(isNaN(formattedIndex) || formattedIndex < 0 || formattedIndex >= self.messages.length) {
+	if(utilities.isInvalidNumber(formattedIndex) || formattedIndex < 0 || formattedIndex >= self.messages.length) {
 		return null;
 	}
 
@@ -298,7 +302,7 @@ ARMAServer.prototype.getMessages = function(read, markRead) {
 	var message = null;
 	var filteredMessages = [];
 
-	for(var i=0;i<self.messages.length;i++) {
+	for(var i = 0; i < self.messages.length; i++) {
 		message = self.messages[i];
 
 		if(message.read === formattedRead || formattedRead === null) {
@@ -326,6 +330,8 @@ ARMAServer.prototype.getReadMessages = function(markRead) {
 };
 
 ARMAServer.prototype.hasMission = function(mission) {
+	var self = this;
+
 	if(utilities.isEmptyString(mission)) {
 		return false;
 	}
@@ -336,7 +342,7 @@ ARMAServer.prototype.hasMission = function(mission) {
 		return false;
 	}
 
-	for(var i=0;i<self.missions.length;i++) {
+	for(var i = 0; i < self.missions.length ;i++) {
 		if(self.missions[i].toLowerCase() === formattedMissionName) {
 			return true;
 		}
@@ -346,6 +352,8 @@ ARMAServer.prototype.hasMission = function(mission) {
 };
 
 ARMAServer.prototype.indexOfMission = function(mission) {
+	var self = this;
+
 	if(utilities.isEmptyString(mission)) {
 		return -1;
 	}
@@ -356,7 +364,7 @@ ARMAServer.prototype.indexOfMission = function(mission) {
 		return -1;
 	}
 
-	for(var i=0;i<self.missions.length;i++) {
+	for(var i = 0; i < self.missions.length; i++) {
 		if(self.missions[i].toLowerCase() === formattedMissionName) {
 			return i;
 		}
@@ -384,7 +392,7 @@ ARMAServer.prototype.hasPlayer = function(player) {
 
 	var currentPlayer = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayer = self.players[i];
 
 		if(Number.isInteger(player)) {
@@ -407,13 +415,13 @@ ARMAServer.prototype.hasPlayerWithNumber = function(number) {
 
 	var formattedPlayerNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedPlayerNumber) || formattedPlayerNumber < 0) {
+	if(utilities.isInvalidNumber(formattedPlayerNumber) || formattedPlayerNumber < 0) {
 		return false;
 	}
 
 	var currentPlayerNumber = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayerNumber = self.players[i].number;
 
 		if(currentPlayerNumber === formattedPlayerNumber) {
@@ -433,7 +441,7 @@ ARMAServer.prototype.hasPlayerWithName = function(name) {
 
 	var currentPlayerName = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayerName = self.players[i].name;
 
 		if(currentPlayerName === name) {
@@ -454,7 +462,7 @@ ARMAServer.prototype.hasPlayerWithUserID = function(userID) {
 	var formattedPlayerID = userID.trim().toLowerCase();
 	var currentPlayerID = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayerID = self.players[i].id.toLowerCase();
 
 		if(currentPlayerID === formattedPlayerID) {
@@ -474,7 +482,7 @@ ARMAServer.prototype.hasPlayerWithIPAddress = function(ipAddress) {
 
 	var currentPlayerIPAddress = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayerIPAddress = self.players[i].ipAddress;
 
 		if(currentPlayerIPAddress === ipAddress) {
@@ -498,7 +506,7 @@ ARMAServer.prototype.indexOfPlayer = function(player) {
 
 	var currentPlayer = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayer = self.players[i];
 
 		if(Number.isInteger(player)) {
@@ -521,13 +529,13 @@ ARMAServer.prototype.indexOfPlayerWithNumber = function(number) {
 
 	var formattedPlayerNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedPlayerNumber) || formattedPlayerNumber < 0) {
+	if(utilities.isInvalidNumber(formattedPlayerNumber) || formattedPlayerNumber < 0) {
 		return -1;
 	}
 
 	var currentPlayerNumber = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayerNumber = self.players[i].number;
 
 		if(currentPlayerNumber === formattedPlayerNumber) {
@@ -547,7 +555,7 @@ ARMAServer.prototype.indexOfPlayerWithName = function(name) {
 
 	var currentPlayerName = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayerName = self.players[i].name;
 
 		if(currentPlayerName === name) {
@@ -568,7 +576,7 @@ ARMAServer.prototype.indexOfPlayerWithUserID = function(userID) {
 	var formattedPlayerID = userID.trim().toLowerCase();
 	var currentPlayerID = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayerID = self.players[i].id.toLowerCase();
 
 		if(currentPlayerID === formattedPlayerID) {
@@ -588,7 +596,7 @@ ARMAServer.prototype.indexOfPlayerWithIPAddress = function(ipAddress) {
 
 	var currentPlayerIPAddress = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayerIPAddress = self.players[i].ipAddress;
 
 		if(currentPlayerIPAddress === ipAddress) {
@@ -602,32 +610,13 @@ ARMAServer.prototype.indexOfPlayerWithIPAddress = function(ipAddress) {
 ARMAServer.prototype.getPlayer = function(index) {
 	var self = this;
 
-	if(player === null || player === undefined) {
+	var formattedIndex = utilities.parseInteger(index);
+
+	if(utilities.isInvalidNumber(formattedIndex) || formattedIndex < 0 || formattedIndex >= self.players.length) {
 		return null;
 	}
 
-	if(!(typeof player === "number" && player >= 0) && typeof player !== "object") {
-		return null;
-	}
-
-	var currentPlayer = null;
-
-	for(var i=0;i<self.players.length;i++) {
-		currentPlayer = self.players[i];
-
-		if(Number.isInteger(player)) {
-			if(currentPlayer.number === player) {
-				return currentPlayer;
-			}
-		}
-		else if(typeof player === "object") {
-			if(currentPlayer === player) {
-				return currentPlayer;
-			}
-		}
-	}
-
-	return null;
+	return self.players[formattedIndex];
 };
 
 ARMAServer.prototype.getPlayerWithNumber = function(number) {
@@ -635,13 +624,13 @@ ARMAServer.prototype.getPlayerWithNumber = function(number) {
 
 	var formattedPlayerNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedPlayerNumber) || formattedPlayerNumber < 0) {
+	if(utilities.isInvalidNumber(formattedPlayerNumber) || formattedPlayerNumber < 0) {
 		return null;
 	}
 
 	var currentPlayer = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayer = self.players[i];
 
 		if(currentPlayer.number === formattedPlayerNumber) {
@@ -661,7 +650,7 @@ ARMAServer.prototype.getPlayerWithName = function(name) {
 
 	var currentPlayer = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayer = self.players[i];
 
 		if(currentPlayer.name === name) {
@@ -682,7 +671,7 @@ ARMAServer.prototype.getPlayerWithUserID = function(userID) {
 	var formattedPlayerID = userID.trim().toLowerCase();
 	var currentPlayer = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayer = self.players[i];
 
 		if(currentPlayer.id.toLowerCase() === formattedPlayerID) {
@@ -702,7 +691,7 @@ ARMAServer.prototype.getPlayerWithIPAddress = function(ipAddress) {
 
 	var currentPlayer = null;
 
-	for(var i=0;i<self.players.length;i++) {
+	for(var i = 0; i < self.players.length; i++) {
 		currentPlayer = self.players[i];
 
 		if(currentPlayer.ipAddress === ipAddress) {
@@ -756,7 +745,7 @@ ARMAServer.prototype.refreshPlayerList = function(callback) {
 
 			var player = null;
 
-			for(var i=0;i<players.length;i++) {
+			for(var i = 0; i < players.length; i++) {
 				player = players[i];
 
 				if(!self.hasPlayerWithUserID(player.id)) {
@@ -770,11 +759,11 @@ ARMAServer.prototype.refreshPlayerList = function(callback) {
 
 			var hasPlayer = null;
 
-			for(var i=0;i<self.players.length;i++) {
+			for(var i = 0; i < self.players.length; i++) {
 				player = self.players[i];
 				hasPlayer = false;
 
-				for(var j=0;j<players.length;j++) {
+				for(var j = 0; j < players.length; j++) {
 					if(player.id === players[j].id) {
 						hasPlayer = true;
 						break;
@@ -840,7 +829,7 @@ ARMAServer.parsePlayerList = function(data, throwErrors) {
 	var player = null;
 	var players = [];
 
-	for(var i=1;i<playerData.length;i++) {
+	for(var i = 1; i < playerData.length; i++) {
 		line = playerData[i].trim();
 
 		if(line.length === 0 || line.match(spacerRegExp) || line.match(playerListHeaderRegExp) || line.match(playersOnServerRegExp)) {
@@ -920,7 +909,7 @@ ARMAServer.prototype.hasUserIDBan = function(ban) {
 
 	var currentBan = null;
 
-	for(var i=0;i<self.bans.userID.length;i++) {
+	for(var i = 0; i < self.bans.userID.length; i++) {
 		currentBan = self.bans.userID[i];
 
 		if(Number.isInteger(ban)) {
@@ -960,7 +949,7 @@ ARMAServer.prototype.hasIPAddressBan = function(ban) {
 
 	var currentBan = null;
 
-	for(var i=0;i<self.bans.ipAddress.length;i++) {
+	for(var i = 0; i < self.bans.ipAddress.length; i++) {
 		currentBan = self.bans.ipAddress[i];
 
 		if(Number.isInteger(ban)) {
@@ -988,13 +977,13 @@ ARMAServer.prototype.hasBanWithNumber = function(number) {
 
 	var formattedBanNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedBanNumber) || formattedBanNumber < 0) {
+	if(utilities.isInvalidNumber(formattedBanNumber) || formattedBanNumber < 0) {
 		return false;
 	}
 
 	var currentBanNumber = null;
 
-	for(var i=0;i<self.bans.userID.length;i++) {
+	for(var i = 0; i < self.bans.userID.length; i++) {
 		currentBanNumber = self.bans.userID[i].number;
 
 		if(currentBanNumber === formattedBanNumber) {
@@ -1002,7 +991,7 @@ ARMAServer.prototype.hasBanWithNumber = function(number) {
 		}
 	}
 
-	for(var i=0;i<self.bans.ipAddress.length;i++) {
+	for(var i = 0; i < self.bans.ipAddress.length; i++) {
 		currentBanNumber = self.bans.ipAddress[i].number;
 
 		if(currentBanNumber === formattedBanNumber) {
@@ -1018,13 +1007,13 @@ ARMAServer.prototype.hasUserIDBanWithNumber = function(number) {
 
 	var formattedBanNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedBanNumber) || formattedBanNumber < 0) {
+	if(utilities.isInvalidNumber(formattedBanNumber) || formattedBanNumber < 0) {
 		return false;
 	}
 
 	var currentBanNumber = null;
 
-	for(var i=0;i<self.bans.userID.length;i++) {
+	for(var i = 0; i < self.bans.userID.length; i++) {
 		currentBanNumber = self.bans.userID[i].number;
 
 		if(currentBanNumber === formattedBanNumber) {
@@ -1040,13 +1029,13 @@ ARMAServer.prototype.hasIPAddressBanWithNumber = function(number) {
 
 	var formattedBanNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedBanNumber) || formattedBanNumber < 0) {
+	if(utilities.isInvalidNumber(formattedBanNumber) || formattedBanNumber < 0) {
 		return false;
 	}
 
 	var currentBanNumber = null;
 
-	for(var i=0;i<self.bans.ipAddress.length;i++) {
+	for(var i = 0; i < self.bans.ipAddress.length; i++) {
 		currentBanNumber = self.bans.ipAddress[i].number;
 
 		if(currentBanNumber === formattedBanNumber) {
@@ -1098,7 +1087,7 @@ ARMAServer.prototype.indexOfUserIDBan = function(ban) {
 
 	var currentBan = null;
 
-	for(var i=0;i<self.bans.userID.length;i++) {
+	for(var i = 0; i < self.bans.userID.length; i++) {
 		currentBan = self.bans.userID[i];
 
 		if(Number.isInteger(ban)) {
@@ -1138,7 +1127,7 @@ ARMAServer.prototype.indexOfIPAddressBan = function(ban) {
 
 	var currentBan = null;
 
-	for(var i=0;i<self.bans.ipAddress.length;i++) {
+	for(var i = 0; i < self.bans.ipAddress.length; i++) {
 		currentBan = self.bans.ipAddress[i];
 
 		if(Number.isInteger(ban)) {
@@ -1166,13 +1155,13 @@ ARMAServer.prototype.indexOfBanWithNumber = function(number) {
 
 	var formattedBanNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedBanNumber) || formattedBanNumber < 0) {
+	if(utilities.isInvalidNumber(formattedBanNumber) || formattedBanNumber < 0) {
 		return -1;
 	}
 
 	var currentBanNumber = null;
 
-	for(var i=0;i<self.bans.userID.length;i++) {
+	for(var i = 0; i < self.bans.userID.length; i++) {
 		currentBanNumber = self.bans.userID[i].number;
 
 		if(currentBanNumber === formattedBanNumber) {
@@ -1180,7 +1169,7 @@ ARMAServer.prototype.indexOfBanWithNumber = function(number) {
 		}
 	}
 
-	for(var i=0;i<self.bans.ipAddress.length;i++) {
+	for(var i = 0; i < self.bans.ipAddress.length; i++) {
 		currentBanNumber = self.bans.ipAddress[i].number;
 
 		if(currentBanNumber === formattedBanNumber) {
@@ -1196,13 +1185,13 @@ ARMAServer.prototype.indexOfUserIDBanWithNumber = function(number) {
 
 	var formattedBanNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedBanNumber) || formattedBanNumber < 0) {
+	if(utilities.isInvalidNumber(formattedBanNumber) || formattedBanNumber < 0) {
 		return -1;
 	}
 
 	var currentBanNumber = null;
 
-	for(var i=0;i<self.bans.userID.length;i++) {
+	for(var i = 0; i < self.bans.userID.length; i++) {
 		currentBanNumber = self.bans.userID[i].number;
 
 		if(currentBanNumber === formattedBanNumber) {
@@ -1218,13 +1207,13 @@ ARMAServer.prototype.indexOfIPAddressBanWithNumber = function(number) {
 
 	var formattedBanNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedBanNumber) || formattedBanNumber < 0) {
+	if(utilities.isInvalidNumber(formattedBanNumber) || formattedBanNumber < 0) {
 		return -1;
 	}
 
 	var currentBanNumber = null;
 
-	for(var i=0;i<self.bans.ipAddress.length;i++) {
+	for(var i = 0; i < self.bans.ipAddress.length; i++) {
 		currentBanNumber = self.bans.ipAddress[i].number;
 
 		if(currentBanNumber === formattedBanNumber) {
@@ -1276,7 +1265,7 @@ ARMAServer.prototype.getUserIDBan = function(ban) {
 
 	var currentBan = null;
 
-	for(var i=0;i<self.bans.userID.length;i++) {
+	for(var i = 0; i < self.bans.userID.length; i++) {
 		currentBan = self.bans.userID[i];
 
 		if(Number.isInteger(ban)) {
@@ -1316,7 +1305,7 @@ ARMAServer.prototype.getIPAddressBan = function(ban) {
 
 	var currentBan = null;
 
-	for(var i=0;i<self.bans.ipAddress.length;i++) {
+	for(var i = 0; i < self.bans.ipAddress.length; i++) {
 		currentBan = self.bans.ipAddress[i];
 
 		if(Number.isInteger(ban)) {
@@ -1344,13 +1333,13 @@ ARMAServer.prototype.getBanWithNumber = function(number) {
 
 	var formattedBanNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedBanNumber) || formattedBanNumber < 0) {
+	if(utilities.isInvalidNumber(formattedBanNumber) || formattedBanNumber < 0) {
 		return null;
 	}
 
 	var currentBan = null;
 
-	for(var i=0;i<self.bans.userID.length;i++) {
+	for(var i = 0; i < self.bans.userID.length; i++) {
 		currentBan = self.bans.userID[i];
 
 		if(currentBan.number === formattedBanNumber) {
@@ -1358,7 +1347,7 @@ ARMAServer.prototype.getBanWithNumber = function(number) {
 		}
 	}
 
-	for(var i=0;i<self.bans.ipAddress.length;i++) {
+	for(var i = 0; i < self.bans.ipAddress.length; i++) {
 		currentBan = self.bans.ipAddress[i];
 
 		if(currentBan.number === formattedBanNumber) {
@@ -1374,13 +1363,13 @@ ARMAServer.prototype.getUserIDBanWithNumber = function(number) {
 
 	var formattedBanNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedBanNumber) || formattedBanNumber < 0) {
+	if(utilities.isInvalidNumber(formattedBanNumber) || formattedBanNumber < 0) {
 		return null;
 	}
 
 	var currentBan = null;
 
-	for(var i=0;i<self.bans.userID.length;i++) {
+	for(var i = 0; i < self.bans.userID.length; i++) {
 		currentBan = self.bans.userID[i];
 
 		if(currentBan.number === formattedBanNumber) {
@@ -1396,13 +1385,13 @@ ARMAServer.prototype.getIPAddressBanWithNumber = function(number) {
 
 	var formattedBanNumber = utilities.parseInteger(number);
 
-	if(isNaN(formattedBanNumber) || formattedBanNumber < 0) {
+	if(utilities.isInvalidNumber(formattedBanNumber) || formattedBanNumber < 0) {
 		return null;
 	}
 
 	var currentBan = null;
 
-	for(var i=0;i<self.bans.ipAddress.length;i++) {
+	for(var i = 0; i < self.bans.ipAddress.length; i++) {
 		currentBan = self.bans.ipAddress[i];
 
 		if(currentBan.number === formattedBanNumber) {
@@ -1448,7 +1437,7 @@ ARMAServer.prototype.hasMission = function(mission) {
 		return false;
 	}
 
-	for(var i=0;i<self.missions.length;i++) {
+	for(var i = 0; i < self.missions.length; i++) {
 		if(self.missions[i] === formattedMission) {
 			return true;
 		}
@@ -1470,7 +1459,7 @@ ARMAServer.prototype.indexOfMission = function(mission) {
 		return -1;
 	}
 
-	for(var i=0;i<self.missions.length;i++) {
+	for(var i = 0; i < self.missions.length; i++) {
 		if(self.missions[i] === formattedMission) {
 			return i;
 		}
@@ -1484,7 +1473,7 @@ ARMAServer.prototype.getMission = function(index) {
 
 	var formattedIndex = utilities.parseInteger(index);
 
-	if(isNaN(index) || index < 0 || index >= self.missions.length) {
+	if(utilities.isInvalidNumber(formattedIndex) || formattedIndex < 0 || formattedIndex >= self.missions.length) {
 		return null;
 	}
 
@@ -1534,7 +1523,7 @@ ARMAServer.prototype.refreshMissionList = function(callback) {
 
 			self.missions.length = 0;
 
-			for(var i=0;i<missions.length;i++) {
+			for(var i = 0; i < missions.length; i++) {
 				self.missions.push(missions[i]);
 			}
 
@@ -1589,7 +1578,7 @@ ARMAServer.parseMissionList = function(data, throwErrors) {
 	var missionName = null;
 	var missions = [];
 
-	for(var i=1;i<missionData.length;i++) {
+	for(var i = 1; i < missionData.length; i++) {
 		missionName = missionData[i].trim();
 
 		if(missionName.length === 0) {
@@ -1615,24 +1604,18 @@ ARMAServer.prototype.loadMission = function(mission, callback) {
 		formattedMission = self.getMission(mission);
 
 		if(formattedMission === null) {
-			var error = new Error("Mission index invalid or out of bounds.");
-			error.status = 400;
-			return callback(error);
+			return callback(new Error("Mission index invalid or out of bounds."));
 		}
 	}
 	else if(typeof mission === "string") {
 		formattedMission = mission.trim();
 
 		if(!self.hasMission(formattedMission)) {
-			var error = new Error("Mission with file name: \"" + formattedMission + "\" not found.");
-			error.status = 400;
-			return callback(error);
+			return callback(new Error("Mission with file name: \"" + formattedMission + "\" not found."));
 		}
 	}
 	else {
-		var error = new Error("Cannot load invalid mission type.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Cannot load invalid mission type."));
 	}
 
 	return self.sendCommand(
@@ -1655,7 +1638,7 @@ ARMAServer.prototype.nextSequenceNumber = function() {
 	}
 
 	return self.sequenceNumber++;
-}
+};
 
 ARMAServer.prototype.login = function(password, callback) {
 	var self = this;
@@ -1665,9 +1648,7 @@ ARMAServer.prototype.login = function(password, callback) {
 	}
 
 	if(typeof password !== "string") {
-		var error = new Error("Missing or invalid password data type.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid password data type."));
 	}
 
 	return self.client.sendPacket(
@@ -1755,9 +1736,7 @@ ARMAServer.prototype.sendCommand = function(command, callback) {
 	}
 
 	if(!self.loggedIn) {
-		var error = new Error("Not logged in!");
-		error.status = 401;
-		return callback(error);
+		return callback(new Error("Not logged in!"));
 	}
 
 	return self.client.sendPacket(
@@ -1833,16 +1812,12 @@ ARMAServer.prototype.privateMessage = function(playerNumber, message, callback) 
 
 	var formattedPlayerNumber = utilities.parseInteger(playerNumber);
 
-	if(isNaN(formattedPlayerNumber) || playerNumber < 0) {
-		var error = new Error("Invalid player number: " + playerNumber);
-		error.status = 400;
-		return callback(error);
+	if(utilities.isInvalidNumber(formattedPlayerNumber) || playerNumber < 0) {
+		return callback(new Error("Invalid player number: " + playerNumber));
 	}
 
 	if(!self.hasPlayerWithNumber(formattedPlayerNumber)) {
-		var error = new Error("Player #" + formattedPlayerNumber + " not found.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Player #" + formattedPlayerNumber + " not found."));
 	}
 
 	return self.sendCommand(
@@ -2016,14 +1991,14 @@ ARMAServer.prototype.refreshBanList = function(callback) {
 			var localBans = null;
 			var newBans = null;
 
-			for(var i=0;i<banType.numberOfBanTypes();i++) {
+			for(var i = 0; i < banType.numberOfBanTypes(); i++) {
 				type = banType.banTypes[i];
 				localBans = self.bans[type.id];
 				newBans = bans[type.id];
 
 				localBans.length = 0;
 
-				for(var j=0;j<newBans.length;j++) {
+				for(var j = 0; j < newBans.length; j++) {
 					localBans.push(newBans[j]);
 				}
 			}
@@ -2070,7 +2045,7 @@ ARMAServer.parseBanList = function(data, throwErrors) {
 		ipAddress: []
 	};
 
-	for(var i=0;i<banData.length;i++) {
+	for(var i = 0; i < banData.length; i++) {
 		line = banData[i].trim();
 
 		if(line.length === 0 || line.match(spacerRegExp) || line.match(banListHeaderRegExp)) {
@@ -2102,23 +2077,21 @@ ARMAServer.parseBanList = function(data, throwErrors) {
 	return bans;
 };
 
-ARMAServer.prototype.kickPlayer = function(player, callback) {
+ARMAServer.prototype.kickPlayer = function(playerNumber, callback) {
 	var self = this;
 
 	if(!utilities.isFunction(callback)) {
 		throw new Error("Missing callback function!");
 	}
 
-	var player = self.getPlayer(player);
+	var playerData = self.getPlayerWithNumber(playerNumber);
 
-	if(player === null) {
-		var error = new Error("Player not found.");
-		error.status = 400;
-		return callback(error);
+	if(playerData === null) {
+		return callback(new Error("Player not found."));
 	}
 
 	return self.sendCommand(
-		"kick " + player.number,
+		"kick " + playerData.number,
 		function(error, packet, bytesSent) {
 			if(error) {
 				return callback(error);
@@ -2129,45 +2102,37 @@ ARMAServer.prototype.kickPlayer = function(player, callback) {
 	);
 };
 
-ARMAServer.prototype.banPlayer = function(player, minutes, reason, callback) {
+ARMAServer.prototype.banPlayer = function(playerNumber, minutes, reason, callback) {
 	var self = this;
 
 	if(!utilities.isFunction(callback)) {
 		throw new Error("Missing callback function!");
 	}
 
-	var player = self.getPlayer(player);
+	var playerData = self.getPlayerWithNumber(playerNumber);
 
-	if(player === null) {
-		var error = new Error("Player not found.");
-		error.status = 400;
-		return callback(error);
+	if(playerData === null) {
+		return callback(new Error("Player not found."));
 	}
 
 	var formattedMinutes = utilities.parseInteger(minutes);
 
-	if(isNaN(formattedMinutes)) {
-		var error = new Error("Missing or invalid ban duration, expected integer.");
-		error.status = 400;
-		return callback(error);
+	if(utilities.isInvalidNumber(formattedMinutes)) {
+		return callback(new Error("Missing or invalid ban duration, expected integer."));
 	}
 
 	if(utilities.isEmptyString(reason)) {
-		var error = new Error("Missing or invalid ban reason, non-empty string required.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid ban reason, non-empty string required."));
 	}
 
 	var formattedReason = reason.trim();
 
 	if(formattedReason.length === 0) {
-		var error = new Error("Ban reason cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Ban reason cannot be empty."));
 	}
 
 	return self.sendCommand(
-		"ban " + player.number + " " + (formattedMinutes < 0 ? "perm" : formattedMinutes) + " " + formattedReason,
+		"ban " + playerData.number + " " + (formattedMinutes < 0 ? "perm" : formattedMinutes) + " " + formattedReason,
 		function(error, packet, bytesSent) {
 			if(error) {
 				return callback(error);
@@ -2186,39 +2151,29 @@ ARMAServer.prototype.addPlayerBan = function(playerID, minutes, reason, callback
 	}
 
 	if(utilities.isEmptyString(playerID)) {
-		var error = new Error("Missing or invalid player id.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid player id."));
 	}
 
 	var formattedPlayerID = playerID.trim();
 
 	if(formattedPlayerID.length === 0) {
-		var error = new Error("Player id cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Player id cannot be empty."));
 	}
 
 	var formattedMinutes = utilities.parseInteger(minutes);
 
-	if(isNaN(formattedMinutes)) {
-		var error = new Error("Missing or invalid ban duration, expected integer.");
-		error.status = 400;
-		return callback(error);
+	if(utilities.isInvalidNumber(formattedMinutes)) {
+		return callback(new Error("Missing or invalid ban duration, expected integer."));
 	}
 
 	if(utilities.isEmptyString(reason)) {
-		var error = new Error("Missing or invalid ban reason, non-empty string required.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid ban reason, non-empty string required."));
 	}
 
 	var formattedReason = reason.trim();
 
 	if(formattedReason.length === 0) {
-		var error = new Error("Ban reason cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Ban reason cannot be empty."));
 	}
 
 	return self.sendCommand(
@@ -2243,9 +2198,7 @@ ARMAServer.prototype.removePlayerBan = function(ban, minutes, reason, callback) 
 	var banToRemove = self.getBan(ban);
 
 	if(banToRemove === null) {
-		var error = new Error("Ban not found.");
-		error.status = 400;
-		return callbaack(error);
+		return callback(new Error("Ban not found."));
 	}
 
 	return self.sendCommand(
@@ -2268,17 +2221,13 @@ ARMAServer.prototype.setRemoteConsolePassword = function(password, callback) {
 	}
 
 	if(utilities.isEmptyString(password)) {
-		var error = new Error("Missing or invalid password.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid password."));
 	}
 
 	var formattedPassword = password.trim();
 
 	if(formattedPassword.length === 0) {
-		var error = new Error("Password cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Password cannot be empty."));
 	}
 
 	return self.sendCommand(
@@ -2302,10 +2251,8 @@ ARMAServer.prototype.setMaxPing = function(maxPing, callback) {
 
 	var formattedMaxPing = utilities.parseInteger(maxPing);
 
-	if(isNaN(formattedMaxPing) || formattedMaxPing < 0) {
-		var error = new Error("Missing or invalid max ping value.");
-		error.status = 400;
-		return callback(error);
+	if(utilities.isInvalidNumber(formattedMaxPing) || formattedMaxPing < 0) {
+		return callback(new Error("Missing or invalid max ping value."));
 	}
 
 	return self.sendCommand(
@@ -2392,10 +2339,8 @@ ARMAServer.prototype.startMonitor = function(intervalSeconds, callback) {
 
 	var formattedIntervalSeconds = utilities.parseInteger(intervalSeconds);
 
-	if(isNaN(formattedIntervalSeconds) || formattedIntervalSeconds <= 0) {
-		var error = new Error("Monitor interval must be a positive integer.");
-		error.status = 400;
-		return callback(error);
+	if(utilities.isInvalidNumber(formattedIntervalSeconds) || formattedIntervalSeconds <= 0) {
+		return callback(new Error("Monitor interval must be a positive integer."));
 	}
 
 	return self.sendCommand(
@@ -2438,10 +2383,8 @@ ARMAServer.prototype.debugOn = function(intervalSeconds, callback) {
 
 	var formattedIntervalSeconds = utilities.parseInteger(intervalSeconds);
 
-	if(isNaN(formattedIntervalSeconds) || formattedIntervalSeconds <= 0) {
-		var error = new Error("Monitor interval must be a positive integer.");
-		error.status = 400;
-		return callback(error);
+	if(utilities.isInvalidNumber(formattedIntervalSeconds) || formattedIntervalSeconds <= 0) {
+		return callback(new Error("Monitor interval must be a positive integer."));
 	}
 
 	return self.sendCommand(
@@ -2483,17 +2426,13 @@ ARMAServer.prototype.debugCheckFileOn = function(fileName, callback) {
 	}
 
 	if(utilities.isEmptyString(fileName)) {
-		var error = new Error("Missing or invalid file name.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid file name."));
 	}
 
 	var formattedFileName = fileName.trim();
 
 	if(formattedFileName.length === 0) {
-		var error = new Error("File name cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("File name cannot be empty."));
 	}
 
 	return self.sendCommand(
@@ -2535,17 +2474,13 @@ ARMAServer.prototype.debugUserSentOn = function(userName, callback) {
 	}
 
 	if(utilities.isEmptyString(userName)) {
-		var error = new Error("Missing or invalid user name.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid user name."));
 	}
 
 	var formattedUserName = userName.trim();
 
 	if(formattedUserName.length === 0) {
-		var error = new Error("User name cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("User name cannot be empty."));
 	}
 
 	return self.sendCommand(
@@ -2587,17 +2522,13 @@ ARMAServer.prototype.debugUserInfoOn = function(userName, callback) {
 	}
 
 	if(utilities.isEmptyString(userName)) {
-		var error = new Error("Missing or invalid user name.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid user name."));
 	}
 
 	var formattedUserName = userName.trim();
 
 	if(formattedUserName.length === 0) {
-		var error = new Error("User name cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("User name cannot be empty."));
 	}
 
 	return self.sendCommand(
@@ -2639,17 +2570,13 @@ ARMAServer.prototype.debugUserQueueOn = function(userName, callback) {
 	}
 
 	if(utilities.isEmptyString(userName)) {
-		var error = new Error("Missing or invalid user name.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid user name."));
 	}
 
 	var formattedUserName = userName.trim();
 
 	if(formattedUserName.length === 0) {
-		var error = new Error("User name cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("User name cannot be empty."));
 	}
 
 	return self.sendCommand(
@@ -2691,17 +2618,13 @@ ARMAServer.prototype.debugJIPQueueOn = function(userName, callback) {
 	}
 
 	if(utilities.isEmptyString(userName)) {
-		var error = new Error("Missing or invalid user name.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid user name."));
 	}
 
 	var formattedUserName = userName.trim();
 
 	if(formattedUserName.length === 0) {
-		var error = new Error("User name cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("User name cannot be empty."));
 	}
 
 	return self.sendCommand(
@@ -2745,9 +2668,7 @@ ARMAServer.prototype.debugTotalSentOn = function(value, callback) {
 	var formattedValue = utilities.parseInteger(value);
 
 	if(formattedValue < 0) {
-		var error = new Error("Value must be a positive non-zero integer.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Value must be a positive non-zero integer."));
 	}
 
 	return self.sendCommand(
@@ -2827,17 +2748,13 @@ ARMAServer.prototype.exec = function(command, callback) {
 	}
 
 	if(utilities.isEmptyString(command)) {
-		var error = new Error("Missing or invalid command.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Missing or invalid command."));
 	}
 
 	var formattedCommand = command.trim();
 
 	if(formattedCommand.length === 0) {
-		var error = new Error("Command cannot be empty.");
-		error.status = 400;
-		return callback(error);
+		return callback(new Error("Command cannot be empty."));
 	}
 
 	return self.sendCommand(
@@ -2852,9 +2769,7 @@ ARMAServer.prototype.exec = function(command, callback) {
 	);
 };
 
-ARMAServer.prototype.onConnect = function() {
-	var self = this;
-};
+ARMAServer.prototype.onConnect = function() { };
 
 ARMAServer.prototype.onDisconnect = function(reason) {
 	var self = this;

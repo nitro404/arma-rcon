@@ -1,3 +1,5 @@
+"use strict";
+
 var validator = require("validator");
 var utilities = require("extra-utilities");
 
@@ -41,7 +43,7 @@ battlEyePacketType.getType = function(value) {
 	if(typeof value === "object") {
 		var currentType = null;
 
-		for(var i=0;i<battlEyePacketType.types.length;i++) {
+		for(var i = 0; i < battlEyePacketType.types.length; i++) {
 			currentType = battlEyePacketType.types[i];
 
 			if(currentType === value) {
@@ -68,7 +70,7 @@ battlEyePacketType.getType = function(value) {
 		if(validator.isInt(formattedType)) {
 			var typeValue = utilities.parseInteger(formattedType);
 
-			if(isNaN(typeValue) || typeValue < 0 || typeValue >= battlEyePacketType.numberOfTypes()) {
+			if(utilities.isInvalidNumber(typeValue) || typeValue < 0 || typeValue >= battlEyePacketType.numberOfTypes()) {
 				return battlEyePacketType.invalid;
 			}
 
@@ -77,7 +79,7 @@ battlEyePacketType.getType = function(value) {
 
 		var currentType = null;
 
-		for(var i=0;i<battlEyePacketType.types.length;i++) {
+		for(var i = 0; i < battlEyePacketType.types.length; i++) {
 			currentType = battlEyePacketType.types[i];
 
 			if(currentType.id === formattedType || currentType.name.toLowerCase() === formattedType.toLowerCase()) {
