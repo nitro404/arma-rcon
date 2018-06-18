@@ -1,6 +1,6 @@
 {
   "name": "arma-rcon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A system for connecting to remote console for ARMA servers over UDP.",
   "main": "index.js",
   "scripts": {
