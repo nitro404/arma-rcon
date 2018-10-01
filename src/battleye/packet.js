@@ -118,7 +118,6 @@ BattlEyePacket.prototype.serialize = function(throwErrors) {
 	if(!self.isValid()) {
 		if(throwErrors) {
 			var error = new Error("Cannot serialize invalid packet!");
-			error.status = 400;
 			error.code = "invalid";
 			throw error;
 		}
