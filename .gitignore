@@ -1,6 +1,7 @@
 node_modules
 bower_components
 coverage
+.nyc_output
 .sass-cache
 yarn.lock
 npm-debug.log

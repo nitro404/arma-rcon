@@ -3,8 +3,12 @@
 [![NPM version][npm-version-image]][npm-url]
 [![Build Status][build-status-image]][build-status-url]
 [![Coverage Status][coverage-image]][coverage-url]
-[![Known Vulnerabilities][snyk-image]][snyk-url]
+[![Known Vulnerabilities][vulnerabilities-image]][vulnerabilities-url]
+[![Dependencies][dependencies-image]][dependencies-url]
 [![Downloads][npm-downloads-image]][npm-url]
+[![Install Size][install-size-image]][install-size-url]
+[![Contributors][contributors-image]][contributors-url]
+[![Pull Requests Welcome][pull-requests-image]][pull-requests-url]
 
 A system for connecting to remote console for ARMA servers over UDP.
 
@@ -85,5 +89,17 @@ npm install arma-rcon
 [coverage-url]: https://coveralls.io/github/nitro404/arma-rcon?branch=master
 [coverage-image]: https://coveralls.io/repos/github/nitro404/arma-rcon/badge.svg?branch=master
 
-[snyk-url]: https://snyk.io/test/github/nitro404/arma-rcon?targetFile=package.json
-[snyk-image]: https://snyk.io/test/github/nitro404/arma-rcon/badge.svg?targetFile=package.json
+[vulnerabilities-url]: https://snyk.io/test/github/nitro404/arma-rcon?targetFile=package.json
+[vulnerabilities-image]: https://snyk.io/test/github/nitro404/arma-rcon/badge.svg?targetFile=package.json
+
+[dependencies-url]: https://david-dm.org/nitro404/arma-rcon
+[dependencies-image]: https://img.shields.io/david/nitro404/arma-rcon.svg
+
+[install-size-url]: https://packagephobia.now.sh/result?p=arma-rcon
+[install-size-image]: https://badgen.net/packagephobia/install/arma-rcon
+
+[contributors-url]: https://github.com/nitro404/arma-rcon/graphs/contributors
+[contributors-image]: https://img.shields.io/github/contributors/nitro404/arma-rcon.svg
+
+[pull-requests-url]: https://github.com/nitro404/arma-rcon/pulls
+[pull-requests-image]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg

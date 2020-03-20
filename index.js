@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
 	BattlEyePacket: require("./src/battleye/packet"),
 	BattlEyeClient: require("./src/battleye/client"),
