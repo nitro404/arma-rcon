@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/nitro404/arma-rcon#readme",
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^3.2.2",
     "bytebuffer": "^5.0.1",
     "crc": "^3.5.0",
     "extra-utilities": "^1.1.2",
