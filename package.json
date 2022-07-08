@@ -36,7 +36,7 @@
     "bytebuffer": "^5.0.1",
     "crc": "^3.5.0",
     "extra-utilities": "^1.1.2",
-    "moment": "^2.20.1",
+    "moment": "^2.29.4",
     "node-schedule": "^1.3.0",
     "validator": "^9.4.0"
   },
