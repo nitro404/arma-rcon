@@ -32,12 +32,12 @@
   },
   "homepage": "https://github.com/nitro404/arma-rcon#readme",
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^3.0.0",
     "bytebuffer": "^5.0.1",
     "crc": "^3.5.0",
-    "extra-utilities": "^1.1.2",
+    "extra-utilities": "^1.2.4",
     "moment": "^2.20.1",
-    "node-schedule": "^1.3.0",
+    "node-schedule": "^2.0.0",
     "validator": "^9.4.0"
   },
   "devDependencies": {
